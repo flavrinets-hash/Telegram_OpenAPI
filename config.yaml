@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: "Telegram Bot API - Webhook Integration"
+  version: 1.0.0
+servers:
+  - url: "https://api.telegram.org"
+    description: "Основной сервер телеграмм АПИ"
+paths:
+  /bot{token}/setWebhook:
+    post:
+      summary: set a setWebhook
+      operationId: setWebhook
+      tags:
+        - Webhook
+      parameters:
+        - in: path
+          name: token
+          required: true
+          description: "Токен телеграмм бота"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Webhook"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+          description: Успешно установлен Webhook
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Webhook:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+        certificate:
+          type: string
+        ip_address:
+          type: string
+        max_connections:
+          type: integer
+        allowed_updates:
+          type: array
+          items:
+            type: string
+          example:
+            - "message"
+            - "edited_channel_post"
+            - "callback_query"
+        drop_pending_updates:
+          type: boolean
+        secret_token:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Success:
+      type: object
+      required:
+        - result
+        - ok
+      properties:
+        result:
+          type: boolean
+        ok:
+          type: boolean
+        description:
+          type: string
