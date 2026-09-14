@@ -8,7 +8,7 @@ servers:
 paths:
   /bot{token}/setWebhook:
     post:
-      summary: set a setWebhook
+      summary: set Webhook
       operationId: setWebhook
       tags:
         - Webhook
@@ -24,7 +24,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Webhook"
+              $ref: "#/components/schemas/BaseWebhook"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/WebhookWithCertificate"
       responses:
         "200":
           content:
@@ -41,21 +44,29 @@ paths:
 
 components:
   schemas:
-    Webhook:
+    BaseWebhook:
       type: object
       required:
         - url
       properties:
         url:
           type: string
-        certificate:
-          type: string
+          format: uri
+          description: "Url сервера, на который тг будет отправлять обновления"
         ip_address:
           type: string
+          description: "Ip-адрес сервера"
+          format: ipv4
+          example: "197.0.2.1"
         max_connections:
           type: integer
+          description: "Количество одновременных подключений бота (default=40, max=100, min=1)"
+          maximum: 100
+          minimum: 1
+          default: 40
         allowed_updates:
           type: array
+          description: "Список обновлений, которые бот хочет получать. По дефолту и с пустым массивом получает все, кроме chat_member, message_reaction,message_reaction_count."
           items:
             type: string
           example:
@@ -64,18 +75,35 @@ components:
             - "callback_query"
         drop_pending_updates:
           type: boolean
+          description: "Сбрасывает копившиеся ранее обновления до момента запуска бота"
         secret_token:
           type: string
+          description: "Секретный токен для авторизации запросов"
+          maxLength: 256
+          minLength: 1
+          pattern: "^[A-Za-z0-9_-]+$"
+    WebhookWithCertificate:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhook"
+        - type: object
+          properties:
+            certificate:
+              type: string
+              format: binary
+              description: "SSl сертификат сервера,передается в случае самоподписанного сертификата."
     Error:
       type: object
       required:
-        - code
-        - message
+        - ok
+        - error_code
+        - description
       properties:
-        code:
+        ok:
+          type: boolean
+          example: false
+        error_code:
           type: integer
-          format: int32
-        message:
+        description:
           type: string
     Success:
       type: object
