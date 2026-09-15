@@ -41,6 +41,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /bot{token}/deleteWebhook:
+    delete:
+      summary: delete Webhook
+      operationId: deleteWebhook
+      tags:
+        - Webhook
+      parameters:
+        - in: path
+          name: token
+          required: true
+          description: "Токен телеграмма"
+          schema:
+            type: string
+        - in: query
+          name: drop_pending_updates
+          required: false
+          description: "Передай True, чтобы сбросить все накопившиеся обновления"
+          schema:
+            type: boolean
+            default: false
+            example: true
+      responses:
+        "200":
+          description: Успешно удален Webhook
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
