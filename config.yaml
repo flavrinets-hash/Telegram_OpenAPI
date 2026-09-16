@@ -28,6 +28,21 @@ paths:
           multipart/form-data:
             schema:
               $ref: "#/components/schemas/WebhookWithCertificate"
+      callbacks:
+        onUpdate:
+          "{$request.body#/url}":
+            post:
+              summary: "Входящее обновление от Telegram"
+              description: "Telegram отправляет событие Update на переданный URL"
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/Update"
+              responses:
+                "200":
+                  description: "Сервер успешно принял и обработал обновление"
       responses:
         "200":
           content:
@@ -42,7 +57,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /bot{token}/deleteWebhook:
-    delete:
+    post:
       summary: delete Webhook
       operationId: deleteWebhook
       tags:
@@ -61,7 +76,7 @@ paths:
           schema:
             type: boolean
             default: false
-            example: true
+            example: false
       responses:
         "200":
           description: Успешно удален Webhook
@@ -69,6 +84,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Success"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /bot{token}/getWebhookInfo:
+    get:
+      summary: get WebhookInfo
+      operationId: getWebhookInfo
+      tags:
+        - Webhook
+      parameters:
+        - in: path
+          name: token
+          required: true
+          description: "Токен телеграмм бота."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Информация о вебхуке."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookInfoResponse"
         default:
           description: unexpected error
           content:
@@ -125,6 +166,61 @@ components:
               type: string
               format: binary
               description: "SSl сертификат сервера,передается в случае самоподписанного сертификата."
+    WebhookInfo:
+      type: object
+      required:
+        - url
+        - has_custom_certificate
+        - pending_update_count
+      properties:
+        url:
+          type: string
+          description: "Адрес сервера, на который ТГ отправляет обновления"
+        has_custom_certificate:
+          type: boolean
+          description: "True, если был загружен сертификат."
+        pending_update_count:
+          type: integer
+          description: "Количество накопившихся обновлений"
+        ip_address:
+          type: string
+          description: "Ip-адрес сервера"
+          format: ipv4
+          example: "197.0.2.1"
+        last_error_date:
+          type: integer
+          format: int64
+          description: "Дата последней ошибки в формате Unix time"
+        last_error_message:
+          type: string
+          description: "Текст последней ошибки"
+        last_synchronization_error_date:
+          type: integer
+          format: int64
+          description: "Дата последней ошибки синхронизации в формате Unix time"
+        max_connections:
+          type: integer
+          description: "Максимальное количество одновременных подключений"
+        allowed_updates:
+          type: array
+          description: "Список обновлений, которые бот хочет получать. По дефолту и с пустым массивом получает все, кроме chat_member, message_reaction,message_reaction_count."
+          items:
+            type: string
+          example:
+            - "message"
+            - "edited_channel_post"
+            - "callback_query"
+    WebhookInfoResponse:
+      type: object
+      required:
+        - result
+        - ok
+      properties:
+        ok:
+          type: boolean
+          example: true
+        result:
+          $ref: "#/components/schemas/WebhookInfo"
     Error:
       type: object
       required:
@@ -151,3 +247,125 @@ components:
           type: boolean
         description:
           type: string
+    User:
+      type: object
+      required:
+        - id
+        - is_bot
+        - first_name
+      properties:
+        id:
+          type: integer
+          format: int64
+        is_bot:
+          type: boolean
+        first_name:
+          type: string
+        last_name:
+          type: string
+        username:
+          type: string
+        language_code:
+          type: string
+        is_premium:
+          type: boolean
+        added_to_attachment_menu:
+          type: boolean
+        can_join_groups:
+          type: boolean
+        can_read_all_group_messages:
+          type: boolean
+        supports_inline_queries:
+          type: boolean
+        can_connect_to_business:
+          type: boolean
+        has_main_web_app:
+          type: boolean
+        has_topics_enabled:
+          type: boolean
+        allows_users_to_create_topics:
+          type: boolean
+        can_manage_bots:
+          type: boolean
+        supports_join_request_queries:
+          type: boolean
+    Chat:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: "Уникальный ID чата (у супергрупп и каналов отрицательный)"
+          example: -1001234567890
+        type:
+          type: string
+          description: "Тип чата"
+          enum:
+            - private
+            - group
+            - supergroup
+            - channel
+          example: "private"
+        title:
+          type: string
+          description: "Название (для групп и каналов)"
+          example: "Чат разработчиков"
+        username:
+          type: string
+          description: "Username канала/группы (если публичный)"
+        first_name:
+          type: string
+          description: "Имя собеседника (для личных чатов)"
+        last_name:
+          type: string
+          description: "Фамилия собеседника (для личных чатов)"
+        is_forum:
+          type: boolean
+          description: "True, если в чате включено обсуждение (форум)"
+        is_direct_messages:
+          type: boolean
+          description: "True, если чат является прямым сообщением (DM)"
+    Message:
+      type: object
+      required:
+        - message_id
+        - date
+        - chat
+      properties:
+        message_id:
+          type: integer
+          description: "Уникальный ID сообщения в рамках чата"
+          example: 42
+        date:
+          type: integer
+          format: int64
+          description: "Дата отправки (Unix timestamp)"
+          example: 1716382910
+        chat:
+          $ref: "#/components/schemas/Chat"
+        from:
+          $ref: "#/components/schemas/User"
+        text:
+          type: string
+          description: "Текст сообщения"
+          example: "Привет, бот!"
+    Update:
+      type: object
+      required:
+        - update_id
+      properties:
+        update_id:
+          type: integer
+          description: "Уникальный ID обновления (инкрементируется)"
+          example: 1000001
+        message:
+          $ref: "#/components/schemas/Message"
+        edited_message:
+          $ref: "#/components/schemas/Message"
+        channel_post:
+          $ref: "#/components/schemas/Message"
+        edited_channel_post:
+          $ref: "#/components/schemas/Message"
