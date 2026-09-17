@@ -67,3 +67,101 @@ server {
    ```bash
    sudo systemctl reload nginx
    ```
+
+---
+
+## 4. Регистрация вебхука через Telegram Bot API 
+
+1. Зарегистрируйте адрес вебхука в Telegram Bot API, выполнив запрос через `curl` в терминале:
+
+```bash
+curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/setWebhook' \
+--header 'Content-Type: application/json' \
+--data '{
+  "url": "https://your-domain.com/bot-webhook",
+  "max_connections": 40,
+  "allowed_updates": [
+    "message",
+    "callback_query"
+  ],
+  "drop_pending_updates": false,
+  "secret_token": "super_secret_token_123"
+}'
+```
+
+> [!NOTE]
+> Префикс `bot` в URL обязателен, а сам токен подставляется вплотную к нему без пробелов (например: `https://api.telegram.org/bot123456:ABC-DEF.../setWebhook`).
+
+*Примеры ответов Telegram Bot API:*
+
+- **Пример успешного ответа (HTTP 200):**
+  ```json
+  {
+    "ok": true,
+    "result": true,
+    "description": "Webhook was set"
+  }
+  ```
+
+- **Пример ответа с ошибкой (HTTP 400 / 404):**  
+  *(например, если URL не защищён HTTPS, домен недоступен или токен неверен)*
+  ```json
+  {
+    "ok": false,
+    "error_code": 400,
+    "description": "Bad Request: HTTPS url must be provided for webhook"
+  }
+  ```
+
+> **Ключевые параметры:**
+> - `url` — обязательный параметр. Полный публичный HTTPS-адрес вашего вебхука, настроенный в Nginx.
+> - `max_connections` — максимальное количество одновременных подключений от Telegram к вашему боту (от 1 до 100, по умолчанию 40).
+> - `allowed_updates` — список типов обновлений, на которые подписывается бот (например, `message`, `callback_query`). Если параметр не передан, бот получает все поддерживаемые события, тоже самое происходит при передаче пустого массива. [Все поддерживаемые типы обновлений](https://core.telegram.org/bots/api#update)
+> - `drop_pending_updates` — если передать `true`, Telegram сбросит все накопившиеся необработанные сообщения и не станет отправлять их боту при старте.
+> - `secret_token` — секретная строка (1–256 символов, `A-Z`, `a-z`, `0-9`, `_`, `-`) для защиты. Telegram будет передавать её в заголовке `X-Telegram-Bot-Api-Secret-Token` при каждом запросе.
+
+---
+
+2. Проверьте статус подключения вебхука через метод `getWebhookInfo`:
+
+```bash
+curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
+```
+
+*Шаблон успешного ответа сервера:*
+```json
+{
+  "ok": true,
+  "result": {
+    "url": "string",
+    "has_custom_certificate": true,
+    "pending_update_count": 0,
+    "ip_address": "197.0.2.1",
+    "last_error_date": 0,
+    "last_error_message": "string",
+    "last_synchronization_error_date": 0,
+    "max_connections": 0,
+    "allowed_updates": [
+      "message",
+      "edited_channel_post",
+      "callback_query"
+    ]
+  }
+}
+```
+---
+
+### Передача сертификата при использовании Self-Signed (самоподписанного) SSL
+
+В этом случае файл **публичного** сертификата необходимо явно передать в Telegram через `multipart/form-data`:
+
+```bash
+curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/setWebhook' \
+--form 'url="https://your-domain.com/bot-webhook"' \
+--form 'certificate=@"/path/to/YOUR_PUBLIC_KEY.pem"'
+```
+
+> [!WARNING]
+> - Символ `@` перед путём к файлу обязателен — он указывает `curl` прикрепить и отправить файл.
+> - Передаётся **только публичный сертификат** (`.pem` / `.crt`). Приватный ключ (`privkey.pem`) передавать категорически нельзя!
+> - При успешной загрузке в методе `getWebhookInfo` параметр `has_custom_certificate` примет значение `true`.
