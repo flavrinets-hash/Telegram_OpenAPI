@@ -18,13 +18,13 @@
 
     [Открыть интерактивный интерфейс :octicons-arrow-right-24:](swagger.html){ .md-button .md-button--primary target="_blank" }
 
--   :material-file-code-outline:{ .lg .middle } __[Скачать OpenAPI YAML](assets/Webhook_Openapi_telegram.yaml)__
+-   :material-file-code-outline:{ .lg .middle } __[Скачать OpenAPI YAML](assets/openapi_telegram.yaml)__
 
     ---
 
     Исходный файл спецификации в формате OpenAPI 3.0.3 для импорта в Postman, Insomnia или генераторы кода.
 
-    [Скачать схему :octicons-download-24:](assets/Webhook_Openapi_telegram.yaml){ .md-button download="Webhook_Openapi_telegram.yaml" }
+    [Скачать схему :octicons-download-24:](assets/openapi_telegram.yaml){ .md-button download="openapi_telegram.yaml" }
 
 </div>
 
@@ -64,5 +64,5 @@
 ??? example "Показать YAML-спецификацию целиком"
 
     ```yaml
-    --8<-- "docs/assets/Webhook_Openapi_telegram.yaml"
+    --8<-- "assets/openapi_telegram.yaml"
     ```

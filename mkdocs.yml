@@ -9,11 +9,11 @@
 site_name: Telegram Webhook & OpenAPI
 site_description: Руководство по настройке Webhook для Telegram Bot API через Nginx и спецификация OpenAPI
 site_author: flavrinets
-site_url: https://flavrinets-hash.github.io/Telegram-OpenAPi/
+site_url: https://flavrinets-hash.github.io/Telegram_OpenAPI/
 
 # Интеграция с GitHub-репозиторием
-repo_name: flavrinets-hash/Telegram-OpenAPi
-repo_url: https://github.com/flavrinets-hash/Telegram-OpenAPi
+repo_name: flavrinets-hash/Telegram_OpenAPI
+repo_url: https://github.com/flavrinets-hash/Telegram_OpenAPI
 edit_uri: edit/main/docs/
 
 # Каталог с исходными файлами документации (по умолчанию 'docs')
@@ -105,6 +105,12 @@ markdown_extensions:
 
   # Подсветка инлайн-кода (`код`)
   - pymdownx.inlinehilite
+
+  # Вставка содержимого файлов
+  - pymdownx.snippets:
+      base_path:
+        - docs
+        - .
 
   # Вкладки с кодом (Code Tabs)
   - pymdownx.tabbed:
