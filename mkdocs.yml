@@ -1,146 +1,86 @@
-# ==============================================================================
-# Конфигурация MkDocs для проекта Telegram Bot API Webhook & OpenAPI
-# ==============================================================================
-# Документация MkDocs: https://www.mkdocs.org/
-# Документация Material for MkDocs: https://squidfunk.github.io/mkdocs-material/
-# ==============================================================================
-
-# Основные метаданные сайта
 site_name: Telegram Webhook & OpenAPI
 site_description: Руководство по настройке Webhook для Telegram Bot API через Nginx и спецификация OpenAPI
 site_author: flavrinets
 site_url: https://flavrinets-hash.github.io/Telegram_OpenAPI/
 
-# Интеграция с GitHub-репозиторием
 repo_name: flavrinets-hash/Telegram_OpenAPI
 repo_url: https://github.com/flavrinets-hash/Telegram_OpenAPI
 edit_uri: edit/main/docs/
 
-# Каталог с исходными файлами документации (по умолчанию 'docs')
 docs_dir: docs
-
-# Каталог для собранного статического сайта (создается при команде mkdocs build)
 site_dir: site
 
-# ------------------------------------------------------------------------------
-# Тема оформления: Material for MkDocs
-# ------------------------------------------------------------------------------
 theme:
   name: material
-  language: ru                          # Локализация интерфейса (поиск, навигация, лейблы на русском)
-
-  # Цветовые палитры с кнопкой переключения Светлая / Тёмная тема
+  language: ru
   palette:
-    # Светлая тема
     - scheme: default
-      primary: indigo                   # Основной цвет шапки и акцентов
-      accent: indigo                    # Цвет интерактивных элементов
+      primary: indigo
+      accent: indigo
       toggle:
         icon: material/brightness-7
         name: Переключить на тёмную тему
-
-    # Тёмная тема
     - scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-4
         name: Переключить на светлую тему
-
-  # Шрифты
   font:
     text: Roboto
     code: Roboto Mono
-
-  # Иконка репозитория в шапке
   icon:
     repo: fontawesome/brands/github
-
-  # Возможности и поведение интерфейса (UX)
   features:
-    - navigation.instant                # Быстрая SPA-навигация без полной перезагрузки страниц
-    - navigation.tracking               # Автоматическое обновление якоря в адресной строке при скролле
-    - navigation.tabs                   # Навигационные вкладки в верхней панели
-    - navigation.sections               # Группировка разделов в боковом меню
-    - navigation.top                    # Кнопка быстрого возврата наверх при прокрутке
-    - navigation.path                   # «Хлебные крошки» вверху страницы
-    - search.suggest                    # Автодополнение и подсказки в поисковой строке
-    - search.highlight                  # Подсветка найденных совпадений на странице
-    - content.code.copy                 # Кнопка быстрого копирования кода в блоках
-    - content.code.annotate             # Всплывающие подсказки и комментарии к строкам кода
-    - content.action.edit               # Кнопка перехода к редактированию страницы на GitHub
-    - content.action.view               # Кнопка просмотра исходного кода на GitHub
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.path
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - content.action.view
 
-# ------------------------------------------------------------------------------
-# Плагины
-# ------------------------------------------------------------------------------
 plugins:
   - search:
       lang:
         - ru
         - en
 
-# ------------------------------------------------------------------------------
-# Расширения Markdown (разметка, подсветка кода, блоки внимания, диаграммы)
-# ------------------------------------------------------------------------------
 markdown_extensions:
-  # Блоки предупреждений/заметок (!!! note, !!! warning, !!! tip)
   - admonition
-  
-  # Сворачиваемые блоки (??? note "Заголовок")
   - pymdownx.details
-
-  # Продвинутые блоки кода и диаграммы Mermaid
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
-  # Подсветка синтаксиса в блоках кода
   - pymdownx.highlight:
-      anchor_linenums: true             # Номера строк как кликабельные якоря
+      anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-
-  # Подсветка инлайн-кода (`код`)
   - pymdownx.inlinehilite
-
-  # Вставка содержимого файлов
   - pymdownx.snippets:
       base_path:
         - docs
         - .
-
-  # Вкладки с кодом (Code Tabs)
   - pymdownx.tabbed:
       alternate_style: true
-
-  # Интерактивные чекбоксы / списки задач (- [x] Задача)
   - pymdownx.tasklist:
       custom_checkbox: true
-
-  # Поддержка эмодзи (:material-telegram:, :rocket: и т.д.)
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-
-  # Таблицы Markdown
   - tables
-
-  # Пользовательские CSS-атрибуты для элементов ({: #id .class })
   - attr_list
-
-  # Поддержка Markdown внутри HTML-тегов
   - md_in_html
-
-  # Оглавление страницы (Table of Contents)
   - toc:
-      permalink: true                   # Значок постоянной ссылки на заголовки
+      permalink: true
 
-# ------------------------------------------------------------------------------
-# Навигация (структура меню сайта)
-# ------------------------------------------------------------------------------
 nav:
   - Главная: index.md
   - Настройка Webhook: webhook.md
