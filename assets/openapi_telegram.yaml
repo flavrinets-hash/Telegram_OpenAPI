@@ -2,9 +2,10 @@ openapi: 3.0.3
 info:
   title: "Telegram Bot API - Webhook Integration"
   version: 1.0.0
+  description: "OpenAPI-схема интеграции Telegram Bot API через Webhook."
 servers:
   - url: "https://api.telegram.org"
-    description: "Основной сервер телеграмм АПИ"
+    description: "Сервер Telegram Bot API"
 paths:
   /bot{token}/setWebhook:
     post:
@@ -128,6 +129,7 @@ components:
           type: string
           format: uri
           description: "Url сервера, на который тг будет отправлять обновления"
+          example: "https://your-domain.com/bot-webhook"
         ip_address:
           type: string
           description: "Ip-адрес сервера"
@@ -157,6 +159,7 @@ components:
           maxLength: 256
           minLength: 1
           pattern: "^[A-Za-z0-9_-]+$"
+          example: "super_secret_token_123"
     WebhookWithCertificate:
       allOf:
         - $ref: "#/components/schemas/BaseWebhook"
