@@ -30,6 +30,7 @@ theme:
     text: Roboto
     code: Roboto Mono
   icon:
+    logo: fontawesome/brands/telegram
     repo: fontawesome/brands/github
   features:
     - navigation.instant
