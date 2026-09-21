@@ -6,27 +6,23 @@
 
 ## Архитектура взаимодействия
 
-При работе в режиме Webhook серверы Telegram самостоятельно доставляют входящие события (сообщения, нажатия inline-кнопок и т.д.) по протоколу HTTPS на ваш веб-сервер. Nginx фильтрует запросы по секретному токену и передаёт их локальному приложению бота.
+При работе в режиме Webhook серверы Telegram самостоятельно доставляют входящие события (сообщения, нажатия inline-кнопок) по протоколу HTTPS на ваш веб-сервер. Nginx принимает защищённое соединение (SSL-терминация) и перенаправляет запрос в локальный сервис бота.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User as Пользователь
     participant TG as Telegram Bot API
-    participant Nginx as Nginx Reverse Proxy
+    participant Nginx as Nginx (Reverse Proxy)
     participant Bot as Сервис бота (127.0.0.1:8000)
 
     User->>TG: Отправка сообщения в чат
-    TG->>Nginx: POST /bot-webhook (HTTPS + Secret Token)
-    Note over Nginx: Проверка заголовка<br/>X-Telegram-Bot-Api-Secret-Token
-    alt Неверный токен
-        Nginx-->>TG: 403 Forbidden
-    else Токен корректен
-        Nginx->>Bot: Проксирование запроса (HTTP)
-        Bot-->>Nginx: 200 OK (Мгновенный ответ)
-        Nginx-->>TG: 200 OK
-        Bot->>TG: Исходящий ответ (sendMessage)
-    end
+    TG->>Nginx: POST /bot-webhook (HTTPS, Update JSON)
+    Nginx->>Bot: Проксирование запроса (HTTP)
+    Bot-->>Nginx: 200 OK (Подтверждение приёма)
+    Nginx-->>TG: 200 OK
+    Bot->>TG: Ответное сообщение (sendMessage)
+    TG->>User: Доставка ответа в чат
 ```
 
 ---
