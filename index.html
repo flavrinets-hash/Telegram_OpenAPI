@@ -566,25 +566,21 @@
 <p>Добро пожаловать в проект по настройке и интеграции <strong>Webhook</strong> для <strong>Telegram Bot API</strong> с использованием обратного прокси <strong>Nginx</strong> и спецификации <strong>OpenAPI 3.0</strong>.</p>
 <hr />
 <h2 id="_1">Архитектура взаимодействия<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>При работе в режиме Webhook серверы Telegram самостоятельно доставляют входящие события (сообщения, нажатия inline-кнопок и т.д.) по протоколу HTTPS на ваш веб-сервер. Nginx фильтрует запросы по секретному токену и передаёт их локальному приложению бота.</p>
+<p>При работе в режиме Webhook серверы Telegram самостоятельно доставляют входящие события (сообщения, нажатия inline-кнопок) по протоколу HTTPS на ваш веб-сервер. Nginx принимает защищённое соединение (SSL-терминация) и перенаправляет запрос в локальный сервис бота.</p>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
     actor User as Пользователь
     participant TG as Telegram Bot API
-    participant Nginx as Nginx Reverse Proxy
+    participant Nginx as Nginx (Reverse Proxy)
     participant Bot as Сервис бота (127.0.0.1:8000)
 
     User-&gt;&gt;TG: Отправка сообщения в чат
-    TG-&gt;&gt;Nginx: POST /bot-webhook (HTTPS + Secret Token)
-    Note over Nginx: Проверка заголовка&lt;br/&gt;X-Telegram-Bot-Api-Secret-Token
-    alt Неверный токен
-        Nginx--&gt;&gt;TG: 403 Forbidden
-    else Токен корректен
-        Nginx-&gt;&gt;Bot: Проксирование запроса (HTTP)
-        Bot--&gt;&gt;Nginx: 200 OK (Мгновенный ответ)
-        Nginx--&gt;&gt;TG: 200 OK
-        Bot-&gt;&gt;TG: Исходящий ответ (sendMessage)
-    end</code></pre>
+    TG-&gt;&gt;Nginx: POST /bot-webhook (HTTPS, Update JSON)
+    Nginx-&gt;&gt;Bot: Проксирование запроса (HTTP)
+    Bot--&gt;&gt;Nginx: 200 OK (Подтверждение приёма)
+    Nginx--&gt;&gt;TG: 200 OK
+    Bot-&gt;&gt;TG: Ответное сообщение (sendMessage)
+    TG-&gt;&gt;User: Доставка ответа в чат</code></pre>
 <hr />
 <h2 id="_2">Разделы документации<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="grid cards">
