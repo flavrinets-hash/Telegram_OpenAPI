@@ -21,9 +21,11 @@
 ## 1. Настройка Nginx в режиме reverse proxy
 
 1. Создайте отдельный конфигурационный файл для бота:
+
    ```bash
    sudo nano /etc/nginx/conf.d/telegram-bot.conf
    ```
+
 2. Настройте блок `server` для обработки защищённых HTTPS-запросов и фильтрации трафика:
 
 ```nginx
@@ -70,6 +72,7 @@ server {
 - Все дефисы `-` заменяются на знаки подчёркивания `_`.
 
 Например, заголовок секретного токена `X-Telegram-Bot-Api-Secret-Token` становится переменной:
+
 ```nginx
 $http_x_telegram_bot_api_secret_token
 ```
@@ -81,12 +84,15 @@ $http_x_telegram_bot_api_secret_token
 ## 2. Проверка и применение конфигурации
 
 1. Проверьте синтаксис конфигурации на наличие ошибок:
+
    ```bash
    sudo nginx -t
    ```
+
    *Ожидаемый вывод: `syntax is ok` и `test is successful`.*
 
 2. Перезагрузите Nginx для применения изменений без прерывания соединений:
+
    ```bash
    sudo systemctl reload nginx
    ```
@@ -153,6 +159,7 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
 ```
 
 *Шаблон успешного ответа сервера:*
+
 ```json
 {
   "ok": true,
@@ -207,31 +214,31 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
 
 ???+ failure "`Connection timed out` / `Connection refused`"
     **Telegram не может связаться с вашим сервером.**
-    
+
     - Убедитесь, что служба Nginx активна: `sudo systemctl status nginx`.
     - Проверьте настройки брандмауэра и убедитесь, что порт 443 открыт: `sudo ufw status` (для открытия: `sudo ufw allow 443/tcp`).
     - В облачных хостингах проверьте правила Firewall / Security Groups в веб-панели управления.
 
 ???+ failure "`SSL error: self signed certificate` / `certificate verify failed`"
     **Ошибка валидации TLS-сертификата.**
-    
+
     - Убедитесь, что в директиве `ssl_certificate` указан файл полной цепочки с промежуточными сертификатами `fullchain.pem`, а не изолированный `cert.pem`.
     - Убедитесь, что домен в DNS-записи и в запросе `setWebhook` совпадает с доменом, для которого выпущен сертификат.
 
 ???+ failure "`Wrong response code (502 Bad Gateway)`"
     **Nginx успешно принял запрос от Telegram, но локальное приложение бота недоступно.**
-    
+
     - Убедитесь, что процесс бота запущен и слушает указанный порт: `sudo ss -tulpn | grep 8000`.
     - Проверьте журнал ошибок самого приложения бота.
 
 ???+ failure "`Wrong response code (403 Forbidden)`"
     **Nginx отклонил запрос из-за непройденной проверки секретного токена.**
-    
+
     - Проверьте, совпадает ли токен в условии `if ($http_x_telegram_bot_api_secret_token != "...")` со значением `secret_token`, переданным при вызове `setWebhook`.
 
 ???+ failure "`Wrong response code (504 Gateway Timeout)`"
     **Локальное приложение бота не успело ответить вовремя** (по умолчанию Nginx ожидает ответ 60 секунд).
-    
+
     В логах Nginx это фиксируется как `upstream timed out` в `error.log` или статус `504` / `499` в `access.log`. Не получив ответ `200 OK`, Telegram расценивает доставку как сбой и начинает циклично слать запрос заново.
     
     - Мгновенно возвращайте статус `HTTP 200 OK` при получении вебхука, не дожидаясь окончания долгой обработки, и выносите длительные операции в фоновые задачи (`asyncio.create_task`, `BackgroundTasks`, `Celery`).

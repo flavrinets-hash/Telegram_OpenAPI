@@ -48,4 +48,3 @@ sequenceDiagram
     [:octicons-arrow-right-24: Открыть спецификацию](openapi.md)
 
 </div>
-
