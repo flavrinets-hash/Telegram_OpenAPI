@@ -10,10 +10,11 @@
 
 - Сервер под управлением Linux с установленным Nginx.
 - Права суперпользователя (`root`) или доступ к вызову команд через `sudo`.
-- Открытые входящие порты `80` (HTTP) и `443` (HTTPS) в брандмауэре.
+- Открытые входящие порты `80` (HTTP) и `443` (HTTPS), `88`, `8443` (Альтернатива HTTPS). [**Вебхуки телеграма работают только на этих портах!**](https://core.telegram.org/bots/api#setwebhook)
 - Доменное имя с настроенной A-записью, указывающей на публичный IP-адрес сервера.
 - Выпущенный SSL/TLS-сертификат для домена (Telegram доставляет вебхуки только по HTTPS).
 - API-токен бота, полученный у [@BotFather](https://t.me/BotFather).
+- Сгенерированный секретный токен для защиты вебхука (сгенерируйте командой `openssl rand -hex 32`).
 - Запущенный локальный сервис бота (в руководстве используется адрес `http://127.0.0.1:8000`).
 
 ---
@@ -22,46 +23,47 @@
 
 1. Создайте отдельный конфигурационный файл для бота:
 
-   ```bash
-   sudo nano /etc/nginx/conf.d/telegram-bot.conf
-   ```
+    ```bash
+    sudo nano /etc/nginx/conf.d/telegram-bot.conf
+    ```
 
 2. Настройте блок `server` для обработки защищённых HTTPS-запросов и фильтрации трафика:
 
-```nginx
-server {
-    listen 443 ssl;
-    server_name your-domain.com;
+    ```nginx
+    server {
+        # Приём HTTPS-трафика (Telegram поддерживает порты 443, 80, 88, 8443)
+        listen 443 ssl;
+        server_name your-domain.com;
 
-    # Пути к SSL/TLS сертификатам
-    ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+        # Пути к SSL/TLS сертификатам
+        ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
 
-    # Проксирование вебхука к сервису бота
-    location /bot-webhook {
-        # Отклонять запросы без правильного секретного токена
-        if ($http_x_telegram_bot_api_secret_token != "super_secret_token_123") {
-            return 403;
+        # Проксирование вебхука к сервису бота
+        location /bot-webhook {
+            # Отклонять запросы без правильного секретного токена
+            if ($http_x_telegram_bot_api_secret_token != "<ВАШ_СЕКРЕТНЫЙ_ТОКЕН>") {
+                return 403;
+            }
+
+            proxy_pass http://127.0.0.1:8000;
+
+            # Передача оригинальных заголовков клиента
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
         }
-
-        proxy_pass http://127.0.0.1:8000;
-
-        # Передача оригинальных заголовков клиента
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
     }
-}
-```
+    ```
 
-!!! note "Ключевые директивы конфигурации"
-    - `listen 443 ssl` — приём входящего HTTPS-трафика на стандартном защищённом порту.
-    - `server_name` — ваше доменное имя, указанное в DNS.
-    - `ssl_certificate` / `ssl_certificate_key` — публичный сертификат (`fullchain.pem`) и приватный ключ (`privkey.pem`).
-    - `location /bot-webhook` — эндпоинт вебхука Telegram.
-    - `proxy_pass` — адрес и порт запущенного локального сервиса бота.
-    - `proxy_set_header` — проброс заголовков с оригинальным IP-адресом клиента и схемой запроса в приложение.
+    !!! note "Ключевые директивы конфигурации"
+        - `listen 443 ssl` — приём входящего HTTPS-трафика на стандартном защищённом порту (Telegram Bot API поддерживает отправку вебхуков только на порты `443`, `80`, `88` и `8443`).
+        - `server_name` — ваше доменное имя, указанное в DNS.
+        - `ssl_certificate` / `ssl_certificate_key` — публичный сертификат (`fullchain.pem`) и приватный ключ (`privkey.pem`).
+        - `location /bot-webhook` — эндпоинт вебхука Telegram.
+        - `proxy_pass` — адрес и порт запущенного локального сервиса бота.
+        - `proxy_set_header` — проброс заголовков с оригинальным IP-адресом клиента и схемой запроса в приложение.
 
 ### Защита вебхука на уровне Nginx через проверку переменной
 
@@ -77,7 +79,7 @@ server {
 $http_x_telegram_bot_api_secret_token
 ```
 
-Условие `if ($http_x_telegram_bot_api_secret_token != "super_secret_token_123")` отклоняет любые запросы без правильного секретного токена со статусом `403 Forbidden`.
+Условие `if ($http_x_telegram_bot_api_secret_token != "<ВАШ_СЕКРЕТНЫЙ_ТОКЕН>")` отклоняет любые запросы без правильного секретного токена со статусом `403 Forbidden`.
 
 ---
 
@@ -85,23 +87,25 @@ $http_x_telegram_bot_api_secret_token
 
 1. Проверьте синтаксис конфигурации на наличие ошибок:
 
-   ```bash
-   sudo nginx -t
-   ```
+    ```bash
+    sudo nginx -t
+    ```
 
-   *Ожидаемый вывод: `syntax is ok` и `test is successful`.*
+    *Ожидаемый вывод: `syntax is ok` и `test is successful`.*
 
 2. Перезагрузите Nginx для применения изменений без прерывания соединений:
 
-   ```bash
-   sudo systemctl reload nginx
-   ```
+    ```bash
+    sudo systemctl reload nginx
+    ```
 
 ---
 
 ## 3. Регистрация вебхука через Telegram Bot API
 
-1. Зарегистрируйте адрес вебхука в Telegram Bot API, выполнив запрос через `curl` в терминале:
+### Шаг 1. Зарегистрируйте адрес вебхука в Telegram Bot API
+
+Выполните запрос к методу `setWebhook` через `curl` в терминале:
 
 ```bash
 curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/setWebhook' \
@@ -114,7 +118,7 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/setWebhook' \
     "callback_query"
   ],
   "drop_pending_updates": false,
-  "secret_token": "super_secret_token_123"
+  "secret_token": "<ВАШ_СЕКРЕТНЫЙ_ТОКЕН>"
 }'
 ```
 
@@ -144,15 +148,17 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/setWebhook' \
     ```
 
 !!! info "Ключевые параметры запроса"
-    - `url` — **обязательный параметр**. Полный публичный HTTPS-адрес вашего вебхука, настроенный в Nginx.
+    - `url` — **обязательный параметр**. Полный публичный HTTPS-адрес вашего вебхука, настроенный в Nginx, на порту 80, 88, 443, 8443.
     - `max_connections` — максимальное количество одновременных подключений от Telegram к вашему боту (от 1 до 100, по умолчанию 40).
-    - `allowed_updates` — список типов обновлений, на которые подписывается бот (например, `message`, `callback_query`). Если параметр не передан или передан пустой массив, бот получает все поддерживаемые события. [Все поддерживаемые типы обновлений](https://core.telegram.org/bots/api#update).
+    - `allowed_updates` — список типов обновлений, на которые подписывается бот (например, `message`, `callback_query`). Если параметр не передан или передан пустой массив, бот получает все поддерживаемые события, кроме `chat_member`, `message_reaction` и `message_reaction_count`. [Все поддерживаемые типы обновлений](https://core.telegram.org/bots/api#update).
     - `drop_pending_updates` — если передать `true`, Telegram сбросит все накопившиеся необработанные сообщения и не станет отправлять их боту при старте.
-    - `secret_token` — секретная строка (1–256 символов, `A-Z`, `a-z`, `0-9`, `_`, `-`) для защиты. Telegram будет передавать её в заголовке `X-Telegram-Bot-Api-Secret-Token` при каждом запросе.
+    - `secret_token` — секретная строка (1–256 символов, `A-Z`, `a-z`, `0-9`, `_`, `-`) для защиты. Рекомендуется генерировать её командой `openssl rand -hex 32`. Telegram будет передавать её в заголовке `X-Telegram-Bot-Api-Secret-Token` при каждом запросе.
 
 ---
 
-2. Проверьте статус подключения вебхука через метод `getWebhookInfo`:
+### Шаг 2. Проверьте статус подключения вебхука через метод getWebhookInfo
+
+Выполните запрос к методу `getWebhookInfo`:
 
 ```bash
 curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
@@ -165,14 +171,13 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
   "ok": true,
   "result": {
     "url": "https://your-domain.com/bot-webhook",
-    "has_custom_certificate": true,
+    "has_custom_certificate": false,
     "pending_update_count": 0,
     "ip_address": "197.0.2.1",
     "last_synchronization_error_date": 0,
-    "max_connections": 0,
+    "max_connections": 40,
     "allowed_updates": [
       "message",
-      "edited_channel_post",
       "callback_query"
     ]
   }
@@ -234,7 +239,7 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
 ???+ failure "`Wrong response code (403 Forbidden)`"
     **Nginx отклонил запрос из-за непройденной проверки секретного токена.**
 
-    - Проверьте, совпадает ли токен в условии `if ($http_x_telegram_bot_api_secret_token != "...")` со значением `secret_token`, переданным при вызове `setWebhook`.
+    - Проверьте, совпадает ли токен в условии `if ($http_x_telegram_bot_api_secret_token != "<ВАШ_СЕКРЕТНЫЙ_ТОКЕН>")` со значением `secret_token`, переданным при вызове `setWebhook`.
 
 ???+ failure "`Wrong response code (504 Gateway Timeout)`"
     **Локальное приложение бота не успело ответить вовремя** (по умолчанию Nginx ожидает ответ 60 секунд).

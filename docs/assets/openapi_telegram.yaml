@@ -9,7 +9,7 @@ servers:
 paths:
   /bot{token}/setWebhook:
     post:
-      summary: set Webhook
+      summary: "Установка вебхука"
       operationId: setWebhook
       tags:
         - Webhook
@@ -17,7 +17,7 @@ paths:
         - in: path
           name: token
           required: true
-          description: "Токен телеграмм бота"
+          description: "Токен бота Telegram"
           schema:
             type: string
       requestBody:
@@ -35,6 +35,18 @@ paths:
             post:
               summary: "Входящее обновление от Telegram"
               description: "Telegram отправляет событие Update на переданный URL"
+              security:
+                - SecretTokenHeader: []
+              parameters:
+                - in: header
+                  name: X-Telegram-Bot-Api-Secret-Token
+                  required: true
+                  description: "Секретный токен, заданный в поле secret_token при вызове setWebhook, который проверяет Nginx для верификации входящих запросов от Telegram"
+                  schema:
+                    type: string
+                    minLength: 1
+                    maxLength: 256
+                    pattern: "^[A-Za-z0-9_-]+$"
               requestBody:
                 required: true
                 content:
@@ -44,22 +56,66 @@ paths:
               responses:
                 "200":
                   description: "Сервер успешно принял и обработал обновление"
+                "403":
+                  description: "Доступ запрещён: неверный или отсутствующий заголовок X-Telegram-Bot-Api-Secret-Token"
       responses:
         "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Success"
-          description: Успешно установлен Webhook
+          description: "Вебхук успешно установлен"
+        "400":
+          description: "Некорректный запрос (неверный формат параметров или недопустимый URL вебхука)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 400
+                description: "Bad Request: HTTPS url must be provided for webhook"
+        "401":
+          description: "Не авторизован (неверный токен бота)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 401
+                description: "Unauthorized"
+        "404":
+          description: "Бот не найден (несуществующий токен)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 404
+                description: "Not Found"
+        "429":
+          description: "Превышен лимит запросов (Too Many Requests)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 429
+                description: "Too Many Requests: retry after 30"
+                parameters:
+                  retry_after: 30
         default:
-          description: unexpected error
+          description: "Непредвиденная ошибка"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
   /bot{token}/deleteWebhook:
     post:
-      summary: delete Webhook
+      summary: "Удаление вебхука"
       operationId: deleteWebhook
       tags:
         - Webhook
@@ -67,33 +123,75 @@ paths:
         - in: path
           name: token
           required: true
-          description: "Токен телеграмма"
+          description: "Токен бота Telegram"
           schema:
             type: string
         - in: query
           name: drop_pending_updates
           required: false
-          description: "Передай True, чтобы сбросить все накопившиеся обновления"
+          description: "Если передано значение true, сбрасывает все накопившиеся обновления"
           schema:
             type: boolean
             default: false
             example: false
       responses:
         "200":
-          description: Успешно удален Webhook
+          description: "Вебхук успешно удалён"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Success"
+        "400":
+          description: "Некорректный запрос"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 400
+                description: "Bad Request: query parameter error"
+        "401":
+          description: "Не авторизован (неверный токен бота)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 401
+                description: "Unauthorized"
+        "404":
+          description: "Бот не найден (несуществующий токен)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 404
+                description: "Not Found"
+        "429":
+          description: "Превышен лимит запросов (Too Many Requests)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 429
+                description: "Too Many Requests: retry after 30"
+                parameters:
+                  retry_after: 30
         default:
-          description: unexpected error
+          description: "Непредвиденная ошибка"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
   /bot{token}/getWebhookInfo:
     get:
-      summary: get WebhookInfo
+      summary: "Получение статуса вебхука"
       operationId: getWebhookInfo
       tags:
         - Webhook
@@ -101,24 +199,72 @@ paths:
         - in: path
           name: token
           required: true
-          description: "Токен телеграмм бота."
+          description: "Токен бота Telegram"
           schema:
             type: string
       responses:
         "200":
-          description: "Информация о вебхуке."
+          description: "Информация о текущем состоянии вебхука"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/WebhookInfoResponse"
+        "400":
+          description: "Некорректный запрос"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 400
+                description: "Bad Request"
+        "401":
+          description: "Не авторизован (неверный токен бота)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 401
+                description: "Unauthorized"
+        "404":
+          description: "Бот не найден (несуществующий токен)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 404
+                description: "Not Found"
+        "429":
+          description: "Превышен лимит запросов (Too Many Requests)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                ok: false
+                error_code: 429
+                description: "Too Many Requests: retry after 30"
+                parameters:
+                  retry_after: 30
         default:
-          description: unexpected error
+          description: "Непредвиденная ошибка"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
 components:
+  securitySchemes:
+    SecretTokenHeader:
+      type: apiKey
+      in: header
+      name: X-Telegram-Bot-Api-Secret-Token
+      description: "Секретный токен для верификации запросов от Telegram на стороне Nginx"
   schemas:
     BaseWebhook:
       type: object
@@ -128,34 +274,33 @@ components:
         url:
           type: string
           format: uri
-          description: "Url сервера, на который тг будет отправлять обновления"
+          description: "HTTPS URL сервера, на который Telegram будет отправлять обновления"
           example: "https://your-domain.com/bot-webhook"
         ip_address:
           type: string
-          description: "Ip-адрес сервера"
+          description: "IP-адрес сервера"
           format: ipv4
           example: "197.0.2.1"
         max_connections:
           type: integer
-          description: "Количество одновременных подключений бота (default=40, max=100, min=1)"
+          description: "Максимальное количество одновременных HTTPS-подключений к вебхуку для доставки обновлений (от 1 до 100, по умолчанию 40)"
           maximum: 100
           minimum: 1
           default: 40
         allowed_updates:
           type: array
-          description: "Список обновлений, которые бот хочет получать. По дефолту и с пустым массивом получает все, кроме chat_member, message_reaction,message_reaction_count."
+          description: "Список типов обновлений, которые должен получать бот. По умолчанию или при передаче пустого массива доставляются все типы обновлений, кроме chat_member, message_reaction и message_reaction_count"
           items:
             type: string
           example:
             - "message"
-            - "edited_channel_post"
             - "callback_query"
         drop_pending_updates:
           type: boolean
-          description: "Сбрасывает копившиеся ранее обновления до момента запуска бота"
+          description: "Если передано значение true, сбрасывает все накопившиеся обновления"
         secret_token:
           type: string
-          description: "Секретный токен для авторизации запросов"
+          description: "Секретный токен для верификации входящих запросов от Telegram"
           maxLength: 256
           minLength: 1
           pattern: "^[A-Za-z0-9_-]+$"
@@ -168,7 +313,7 @@ components:
             certificate:
               type: string
               format: binary
-              description: "SSl сертификат сервера,передается в случае самоподписанного сертификата."
+              description: "Публичный SSL/TLS-сертификат сервера. Передаётся при использовании самоподписанного сертификата"
     WebhookInfo:
       type: object
       required:
@@ -178,40 +323,43 @@ components:
       properties:
         url:
           type: string
-          description: "Адрес сервера, на который ТГ отправляет обновления"
+          description: "URL сервера, на который Telegram отправляет обновления. Необходимо, чтобы телеграмм отправлял запрос на порты 443, 80, 88 или 8443"
         has_custom_certificate:
           type: boolean
-          description: "True, если был загружен сертификат."
+          description: "Принимает значение true, если для проверки вебхука загружен самоподписанный сертификат"
+          example: false
         pending_update_count:
           type: integer
-          description: "Количество накопившихся обновлений"
+          description: "Количество ожидающих доставки обновлений"
+          example: 0
         ip_address:
           type: string
-          description: "Ip-адрес сервера"
+          description: "IP-адрес сервера"
           format: ipv4
           example: "197.0.2.1"
         last_error_date:
           type: integer
           format: int64
-          description: "Дата последней ошибки в формате Unix time"
+          description: "Дата и время последней ошибки при доставке обновления (Unix time)"
         last_error_message:
           type: string
-          description: "Текст последней ошибки"
+          description: "Описание последней ошибки при доставке обновления"
         last_synchronization_error_date:
           type: integer
           format: int64
-          description: "Дата последней ошибки синхронизации в формате Unix time"
+          description: "Дата и время последней ошибки синхронизации (Unix time)"
+          example: 0
         max_connections:
           type: integer
-          description: "Максимальное количество одновременных подключений"
+          description: "Максимальное количество одновременных подключений к вебхуку"
+          example: 40
         allowed_updates:
           type: array
-          description: "Список обновлений, которые бот хочет получать. По дефолту и с пустым массивом получает все, кроме chat_member, message_reaction,message_reaction_count."
+          description: "Список типов обновлений, на которые подписан бот. По умолчанию или при передаче пустого массива доставляются все типы обновлений, кроме chat_member, message_reaction и message_reaction_count"
           items:
             type: string
           example:
             - "message"
-            - "edited_channel_post"
             - "callback_query"
     WebhookInfoResponse:
       type: object
@@ -231,6 +379,17 @@ components:
         - error_code
         - description
       properties:
+        parameters:
+          type: object
+          description: "Дополнительные параметры ошибки"
+          properties:
+            retry_after:
+              type: integer
+              description: "Время в секундах, через которое можно повторить запрос"
+            migrate_to_chat_id:
+              type: integer
+              fromat: int64
+              description: "ID чата, на который нужно перенаправить запрос"
         ok:
           type: boolean
           example: false
@@ -327,10 +486,10 @@ components:
           description: "Фамилия собеседника (для личных чатов)"
         is_forum:
           type: boolean
-          description: "True, если в чате включено обсуждение (форум)"
+          description: "Принимает значение true, если в супергруппе включены темы (форум)"
         is_direct_messages:
           type: boolean
-          description: "True, если чат является прямым сообщением (DM)"
+          description: "Принимает значение true, если чат является чатом личных сообщений канала (Direct Messages)"
     Message:
       type: object
       required:
@@ -372,3 +531,28 @@ components:
           $ref: "#/components/schemas/Message"
         edited_channel_post:
           $ref: "#/components/schemas/Message"
+        callback_query:
+          $ref: "#/components/schemas/CallbackQuery"
+    CallbackQuery:
+      type: object
+      required:
+        - id
+        - from
+        - chat_instance
+      properties:
+        id:
+          type: string
+          description: "Уникальный идентификатор запроса"
+        from:
+          $ref: "#/components/schemas/User"
+        message:
+          $ref: "#/components/schemas/Message"
+        inline_message_id:
+          type: string
+          description: "Уникальный идентификатор inline-сообщения."
+        chat_instance:
+          type: string
+          description: "Уникальный идентификатор чата, в котором был вызван запрос"
+        data:
+          type: string
+          description: "Данные, отправленные пользователем при нажатии на inline-кнопку"
