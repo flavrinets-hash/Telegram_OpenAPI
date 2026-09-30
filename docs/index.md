@@ -35,7 +35,7 @@ sequenceDiagram
 
     ---
 
-    Пошаговое руководство по развёртыванию обратного прокси Nginx, выпуску SSL-сертификатов, регистрации вебхука в Telegram Bot API и устранению неполадок (Troubleshooting).
+    Пошаговое руководство по настройке обратного прокси Nginx, работе с SSL/TLS-сертификатами (Let's Encrypt и Self-Signed), регистрации вебхука в Telegram Bot API и устранению неполадок (Troubleshooting).
 
     [:octicons-arrow-right-24: Перейти к руководству](webhook.md)
 
@@ -43,7 +43,7 @@ sequenceDiagram
 
     ---
 
-    Описание схемы API (OpenAPI 3.0.3) для метода `setWebhook`, поддержка отправки сертификатов (`multipart/form-data`) и структура событий `Update`.
+    Описание схемы API (OpenAPI 3.0.3) для методов управления вебхуком (`setWebhook`, `getWebhookInfo`, `deleteWebhook`), поддержка отправки сертификатов (`multipart/form-data`) и структура входящих событий `Update` и `CallbackQuery`.
 
     [:octicons-arrow-right-24: Открыть спецификацию](openapi.md)
 
