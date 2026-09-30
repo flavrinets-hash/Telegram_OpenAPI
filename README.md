@@ -1,6 +1,6 @@
-# Telegram Bot API Webhook — Docs-as-Code Project
+# Telegram Webhook via Nginx — Docs-as-Code Project
 
-Публичная техническая документация по настройке и безопасной интеграции вебхуков Telegram Bot API через веб-сервер Nginx.
+Практическая техническая документация по настройке и безопасной интеграции вебхуков Telegram Bot API через веб-сервер Nginx с сопутствующей спецификацией OpenAPI 3.0.
 
 🔗 **Опубликованная документация:** [https://flavrinets-hash.github.io/Telegram_OpenAPI/](https://flavrinets-hash.github.io/Telegram_OpenAPI/)
 

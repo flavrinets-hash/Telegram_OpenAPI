@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "Telegram Bot API - Webhook Integration"
   version: 1.0.0
-  description: "OpenAPI-схема интеграции Telegram Bot API через Webhook."
+  description: "OpenAPI-спецификация методов управления вебхуком Telegram Bot API (setWebhook, getWebhookInfo, deleteWebhook) и обратного вызова onUpdate."
 servers:
   - url: "https://api.telegram.org"
     description: "Сервер Telegram Bot API"

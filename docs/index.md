@@ -1,6 +1,6 @@
-# Telegram Bot API: Webhook & OpenAPI
+# Telegram Webhook via Nginx: руководство и OpenAPI-спецификация
 
-Добро пожаловать в проект по настройке и интеграции **Webhook** для **Telegram Bot API** с использованием обратного прокси **Nginx** и спецификации **OpenAPI 3.0**.
+Добро пожаловать в руководство по безопасной интеграции **Webhook** для **Telegram Bot API** с использованием обратного прокси **Nginx** и спецификации **OpenAPI 3.0**.
 
 ---
 

@@ -1,6 +1,6 @@
-# Спецификация OpenAPI (Telegram Bot API — Webhook)
+# Спецификация OpenAPI (Telegram Webhook API)
 
-Спецификация описывает контракты взаимодействия с методами Telegram Bot API для управления вебхуком, а также формат входящих событий (обратных вызовов `callbacks` / `Update`).
+Спецификация описывает контракты взаимодействия с методами Telegram Bot API для управления вебхуком (`setWebhook`, `getWebhookInfo`, `deleteWebhook`), а также формат входящих событий (обратных вызовов `callbacks` / `Update`).
 
 ---
 
@@ -42,7 +42,7 @@
     - `application/json` (`BaseWebhook`) — стандартная установка без собственного SSL-сертификата.
     - `multipart/form-data` (`WebhookWithCertificate`) — установка с передачей файла самоподписанного сертификата (`certificate`).
 - **Callbacks (`onUpdate`):**
-    - Telegram отправляет событие `Update` на указанный в теле запроса `url` методом `POST`.
+    - Telegram отправляет событие `Update` на указанный в теле запроса `url` методом `POST` с передачей секретного токена в заголовке `X-Telegram-Bot-Api-Secret-Token`.
 
 ### 2. `GET /bot{token}/getWebhookInfo`
 
@@ -66,7 +66,8 @@
 
 Спецификация описывает ключевые схемы данных Telegram Bot API:
 
-* **`Update`** — входящее событие от Telegram (`update_id`, входящее или изменённое сообщение, пост в канале).
+* **`Update`** — входящее событие от Telegram (`update_id`, входящее или изменённое сообщение, пост в канале, нажатие inline-кнопки).
+* **`CallbackQuery`** — запрос при нажатии на inline-кнопку (`id`, автор `from`, сообщение `message`, данные `data`).
 * **`Message`** — сообщение (`message_id`, автор `from`, чат `chat`, дата отправки и текст).
 * **`Chat`** — данные чата (тип `private` / `group` / `supergroup` / `channel`, ID и название).
 * **`User`** — профиль пользователя или бота (ID, имя, username, статус бота).

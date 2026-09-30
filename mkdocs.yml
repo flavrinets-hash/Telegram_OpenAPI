@@ -1,5 +1,5 @@
-site_name: Telegram Webhook & OpenAPI
-site_description: Руководство по настройке Webhook для Telegram Bot API через Nginx и спецификация OpenAPI
+site_name: Telegram Webhook via Nginx
+site_description: Практическое руководство по интеграции вебхуков Telegram Bot API через Nginx и спецификация OpenAPI
 site_author: flavrinets
 site_url: https://flavrinets-hash.github.io/Telegram_OpenAPI/
 
