@@ -1,0 +1,5 @@
+site/
+notes/
+.venv/
+node_modules/
+

@@ -1,0 +1,64 @@
+<mxfile host="65bd71144e">
+    <diagram id="telegram-webhook-architecture" name="Схема архитектуры Webhook Telegram Bot API">
+        <mxGraphModel dx="572" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1420" pageHeight="540" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;b style=&quot;font-size: 17px;&quot;&gt;Схема архитектуры Webhook-решения Telegram Bot API&lt;/b&gt;" vertex="1">
+                    <mxGeometry height="30" width="500" x="460" y="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="zone_internet" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eceff1;strokeColor=#b0bec5;strokeWidth=1;" value="&lt;b style=&quot;color: #546e7a; font-size: 12px;&quot;&gt;Интернет&lt;/b&gt;" vertex="1">
+                    <mxGeometry height="24" width="80" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="sep_internet" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;strokeColor=#cfd8dc;strokeWidth=1.5;" value="">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="310" y="85" as="sourcePoint"/>
+                        <mxPoint x="310" y="415" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontColor=#004c87;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Серверы Telegram&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: #4a6b82;&quot;&gt;(внешний блок)&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;code style=&quot;font-size: 12px; color: #0288d1;&quot;&gt;api.telegram.org&lt;/code&gt;" vertex="1">
+                    <mxGeometry height="120" width="190" x="50" y="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="ext" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b0bec5;strokeWidth=1.5;dashed=1;fontColor=#546e7a;" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Посторонний клиент&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: #78909c;&quot;&gt;(сканеры / спам)&lt;/span&gt;" vertex="1">
+                    <mxGeometry height="75" width="190" x="50" y="275" as="geometry"/>
+                </mxCell>
+                <mxCell id="vps" parent="1" style="swimlane;startSize=28;rounded=1;arcSize=4;fillColor=#f8f9fa;strokeColor=#495057;strokeWidth=2;html=1;fontColor=#212529;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;VPS (Ваш сервер)&lt;/b&gt;" vertex="1">
+                    <mxGeometry height="340" width="970" x="380" y="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="ufw" parent="vps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=1.5;fontColor=#b45f06;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;UFW&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;(файрвол)&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;background-color: #fff2cc; padding: 3px 6px; border: 1px solid #d6b656; border-radius: 3px;&quot;&gt;&lt;code style=&quot;color: #7f4f00; font-size: 11.5px;&quot;&gt;allow 443/tcp&lt;/code&gt;&lt;/span&gt;" vertex="1">
+                    <mxGeometry height="150" width="160" x="40" y="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="nginx" parent="vps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=1.5;fontColor=#274e13;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Nginx&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; padding: 0 12px; font-size: 11.5px; line-height: 1.6;&quot;&gt;• &lt;b&gt;TLS (Let&amp;#39;s Encrypt)&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Проверка токена:&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;code style=&quot;font-size: 10px; color: #1b5e20;&quot;&gt;X-Telegram-Bot-Api-Secret-Token&lt;/code&gt;&lt;br&gt;• &lt;b&gt;Проксирование&lt;/b&gt;&lt;/div&gt;" vertex="1">
+                    <mxGeometry height="150" width="310" x="300" y="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="bot" parent="vps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=1.5;fontColor=#351c75;" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;Сервис бота&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; padding: 0 16px; font-size: 12px; line-height: 1.6;&quot;&gt;• &lt;code style=&quot;font-size: 12px; color: #351c75;&quot;&gt;127.0.0.1:8000&lt;/code&gt;&lt;br&gt;• Запущен через &lt;b&gt;systemd&lt;/b&gt;&lt;/div&gt;" vertex="1">
+                    <mxGeometry height="150" width="240" x="730" y="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ufw_nginx" edge="1" parent="vps" source="ufw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2e7d32;strokeWidth=2;fontColor=#2e7d32;align=center;verticalAlign=bottom;" target="nginx" value="разрешённый&lt;br&gt;трафик">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_nginx_bot" edge="1" parent="vps" source="nginx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#005580;strokeWidth=2;fontColor=#005580;" target="bot" value="HTTP, проксирование">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_tg_ufw" edge="1" parent="1" source="tg" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2e7d32;strokeWidth=2.5;fontColor=#1b5e20;" target="ufw" value="POST /bot-webhook&lt;br&gt;HTTPS 443, Update JSON">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_bot_tg" edge="1" parent="1" source="bot" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3f51b5;strokeWidth=2.5;fontColor=#1a237e;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" target="tg" value="sendMessage, HTTPS">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1190" y="460"/>
+                            <mxPoint x="145" y="460"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ext_nginx" edge="1" parent="1" source="ext" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d32f2f;strokeWidth=1.5;dashed=1;fontColor=#b71c1c;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" target="nginx" value="посторонний клиент без токена → 403">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="835" y="312"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

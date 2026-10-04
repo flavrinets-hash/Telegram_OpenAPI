@@ -4,25 +4,35 @@
 
 ---
 
-## Архитектура взаимодействия
+### Схема архитектуры
 
-При работе в режиме Webhook серверы Telegram самостоятельно доставляют входящие события (сообщения, нажатия inline-кнопок) по протоколу HTTPS на ваш веб-сервер. Nginx принимает защищённое соединение (SSL-терминация) и перенаправляет запрос в локальный сервис бота.
+![Схема архитектуры Webhook-решения Telegram Bot API](assets/architecture.svg)
+
+> Исходный файл схемы для редактирования: [`architecture.drawio`](assets/architecture.drawio) *(открывается через [Draw.io](https://app.diagrams.net))*.
+
+### Диаграмма последовательности (Sequence Diagram)
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User as Пользователь
-    participant TG as Telegram Bot API
-    participant Nginx as Nginx (Reverse Proxy)
+    participant TG as Серверы Telegram
+    participant Nginx as Nginx (TLS, reverse proxy)
     participant Bot as Сервис бота (127.0.0.1:8000)
+    participant Ext as Посторонний клиент
 
-    User->>TG: Отправка сообщения в чат
-    TG->>Nginx: POST /bot-webhook (HTTPS, Update JSON)
+    User->>TG: Сообщение в чат
+    TG->>Nginx: POST /bot-webhook (HTTPS, Update JSON,<br/>заголовок X-Telegram-Bot-Api-Secret-Token)
+    Note over Nginx: Проверка secret token
     Nginx->>Bot: Проксирование запроса (HTTP)
-    Bot-->>Nginx: 200 OK (Подтверждение приёма)
+    Bot-->>Nginx: 200 OK (подтверждение приёма)
     Nginx-->>TG: 200 OK
-    Bot->>TG: Ответное сообщение (sendMessage)
-    TG->>User: Доставка ответа в чат
+    Note over TG,Nginx: Если ответ не 2xx или таймаут,<br/>Telegram повторит доставку
+    Bot->>TG: sendMessage (HTTPS)
+    TG->>User: Ответ в чат
+
+    Ext->>Nginx: POST /bot-webhook (без токена или с неверным)
+    Nginx-->>Ext: 403 Forbidden
 ```
 
 ---
@@ -47,4 +57,11 @@ sequenceDiagram
 
     [:octicons-arrow-right-24: Открыть спецификацию](openapi.md)
 
+-   :material-book-open-page-variant:{ .lg .middle } __[Глоссарий](glossary.md)__
+
+    ---
+
+    Глоссарий терминов и понятий, используемых в проекте, включая сетевую инфраструктуру, работу с Nginx, SSL/TLS-сертификаты и API-контракты.
+
+    [:octicons-arrow-right-24: Перейти к глоссарию](glossary.md)
 </div>
