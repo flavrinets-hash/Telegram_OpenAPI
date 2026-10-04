@@ -8,7 +8,7 @@
 
 ![Схема архитектуры Webhook-решения Telegram Bot API](assets/architecture.svg)
 
-> Исходный файл схемы для редактирования: [`architecture.drawio`](assets/architecture.drawio) *(открывается через [Draw.io](https://app.diagrams.net))*.
+> Исходный файл схемы для редактирования: [`architecture.drawio`](assets/architecture.drawio).
 
 ## Диаграмма последовательности (Sequence Diagram)
 
