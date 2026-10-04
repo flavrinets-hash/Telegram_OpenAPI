@@ -4,13 +4,13 @@
 
 ---
 
-### Схема архитектуры
+## Схема архитектуры
 
 ![Схема архитектуры Webhook-решения Telegram Bot API](assets/architecture.svg)
 
 > Исходный файл схемы для редактирования: [`architecture.drawio`](assets/architecture.drawio) *(открывается через [Draw.io](https://app.diagrams.net))*.
 
-### Диаграмма последовательности (Sequence Diagram)
+## Диаграмма последовательности (Sequence Diagram)
 
 ```mermaid
 sequenceDiagram
@@ -64,4 +64,5 @@ sequenceDiagram
     Глоссарий терминов и понятий, используемых в проекте, включая сетевую инфраструктуру, работу с Nginx, SSL/TLS-сертификаты и API-контракты.
 
     [:octicons-arrow-right-24: Перейти к глоссарию](glossary.md)
+
 </div>
