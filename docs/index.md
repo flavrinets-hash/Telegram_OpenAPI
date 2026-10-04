@@ -43,7 +43,7 @@ sequenceDiagram
 
     ---
 
-    Описание схемы API (OpenAPI 3.0.3) для методов управления вебхуком (`setWebhook`, `getWebhookInfo`, `deleteWebhook`), поддержка отправки сертификатов (`multipart/form-data`) и структура входящих событий `Update` и `CallbackQuery`.
+    Описание схемы API (OpenAPI 3.0) для методов управления вебхуком (`setWebhook`, `getWebhookInfo`, `deleteWebhook`), поддержка отправки сертификатов (`multipart/form-data`) и структура входящих событий `Update` и `CallbackQuery`.
 
     [:octicons-arrow-right-24: Открыть спецификацию](openapi.md)
 
