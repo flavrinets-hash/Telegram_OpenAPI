@@ -22,7 +22,7 @@
 
     ---
 
-    Исходный файл спецификации в формате OpenAPI 3.0.3 для импорта в Postman, Insomnia или генераторы кода.
+    Исходный файл спецификации в формате OpenAPI 3.0 для импорта в Postman, Insomnia или генераторы кода.
 
     [Скачать схему :octicons-download-24:](assets/openapi_telegram.yaml){ .md-button download="openapi_telegram.yaml" }
 
