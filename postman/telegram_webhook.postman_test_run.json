@@ -1,0 +1,124 @@
+{
+	"id": "af2cd86f-7007-4aba-b1f4-8e4afafce887",
+	"name": "Telegram Bot API - Webhook Integration",
+	"timestamp": "2026-10-05T22:35:11.014Z",
+	"collection_id": "58013225-8bc7370b-d5bd-4910-8a91-82c5217aadf6",
+	"folder_id": 0,
+	"environment_id": "58013225-55b6cb1f-ce97-4c3b-9d1d-bf8eb218bb74",
+	"totalPass": 5,
+	"delay": "70",
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-10-05T22:35:07.445Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "d1bd487d-a1f1-4450-baac-7a3a97a6b045",
+			"name": "Установка вебхука",
+			"url": "https://api.telegram.org/bot<BOT_TOKEN>/setWebhook",
+			"time": 2013,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response is JSON": true,
+				"Response ok is true": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response is JSON": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response ok is true": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				2013
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response is JSON": true,
+					"Response ok is true": true
+				}
+			]
+		},
+		{
+			"id": "f533f466-b69c-4b77-8e33-c6c78d0ffd9d",
+			"name": "Получение статуса вебхука",
+			"url": "https://api.telegram.org/bot<BOT_TOKEN>/getWebhookInfo",
+			"time": 335,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				335
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "d2e0e247-3a7b-4340-a100-ef8afb0df8b9",
+			"name": "Удаление вебхука",
+			"url": "https://api.telegram.org/bot<BOT_TOKEN>/deleteWebhook?drop_pending_updates=false",
+			"time": 335,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Поле ok равно true": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Поле ok равно true": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				335
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Поле ok равно true": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 2683,
+	"collection": {
+		"requests": [
+			{
+				"id": "d1bd487d-a1f1-4450-baac-7a3a97a6b045",
+				"method": "POST"
+			},
+			{
+				"id": "f533f466-b69c-4b77-8e33-c6c78d0ffd9d",
+				"method": "GET"
+			},
+			{
+				"id": "d2e0e247-3a7b-4340-a100-ef8afb0df8b9",
+				"method": "POST"
+			}
+		]
+	}
+}
