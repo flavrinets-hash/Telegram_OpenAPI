@@ -1,13 +1,13 @@
 # Настройка webhook Telegram Bot API через Nginx: руководство и OpenAPI-спецификация
 
-[![Deploy MkDocs to GitHub Pages](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/deploy.yml/badge.svg)](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/deploy.yml)
-[![Markdown Quality Check](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/markdown-lint.yml)
+[![Deploy MkDocs to GitHub Pages](https://img.shields.io/github/actions/workflow/status/flavrinets-hash/Telegram_OpenAPI/deploy.yml?style=flat-square&logo=github&label=Deploy%20Docs)](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/deploy.yml)
+[![Markdown Quality Check](https://img.shields.io/github/actions/workflow/status/flavrinets-hash/Telegram_OpenAPI/markdown-lint.yml?style=flat-square&logo=markdown&label=Markdown%20Lint)](https://github.com/flavrinets-hash/Telegram_OpenAPI/actions/workflows/markdown-lint.yml)
 
 Практическая техническая документация по настройке и безопасной интеграции вебхуков Telegram Bot API через веб-сервер Nginx с сопутствующей спецификацией OpenAPI 3.0.
 
 🔗 **Опубликованная документация:** [https://flavrinets-hash.github.io/Telegram_OpenAPI/](https://flavrinets-hash.github.io/Telegram_OpenAPI/)
 
-**Стек технологий:** MkDocs (Material), OpenAPI 3.0, Nginx, GitHub Actions.
+**Стек технологий:** MkDocs (Material), OpenAPI 3.0, Postman, Nginx, GitHub Actions.
 
 ---
 
@@ -52,3 +52,14 @@
    ```
 
    После запуска документация будет доступна по адресу `http://127.0.0.1:8000`.
+
+---
+
+## Тестирование через Postman
+
+В директории [`postman/`](postman/) подготовлены артефакты для тестирования жизненного цикла вебхука:
+
+* [`postman/telegram_webhook.postman_collection.json`](postman/telegram_webhook.postman_collection.json) — коллекция запросов (`setWebhook`, `getWebhookInfo`, `deleteWebhook`) с преднастроенными тестами и переменными окружения.
+* [`postman/telegram_webhook.postman_test_run.json`](postman/telegram_webhook.postman_test_run.json) — сохранённый отчёт успешного выполнения сквозного E2E-сценария.
+
+Коллекция готова к импорту в Postman. Для запуска сценария достаточно указать токен бота в переменной окружения `token` (в поле *Current Value*).

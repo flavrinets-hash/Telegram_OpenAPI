@@ -65,4 +65,12 @@ sequenceDiagram
 
     [:octicons-arrow-right-24: Перейти к глоссарию](glossary.md)
 
+-   :material-lightning-bolt:{ .lg .middle } __[Тестирование (Postman)](postman.md)__
+
+    ---
+
+    Готовая коллекция запросов Postman и автоматизированный E2E-сценарий (setWebhook ➔ getWebhookInfo ➔ deleteWebhook) с автотестами и отчётом.
+
+    [:octicons-arrow-right-24: Перейти к тестированию](postman.md)
+
 </div>

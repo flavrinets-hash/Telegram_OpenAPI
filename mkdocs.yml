@@ -87,4 +87,5 @@ nav:
   - Главная: index.md
   - Настройка Webhook: webhook.md
   - OpenAPI спецификация: openapi.md
+  - Тестирование (Postman): postman.md
   - Глоссарий: glossary.md
