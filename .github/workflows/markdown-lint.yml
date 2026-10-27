@@ -10,7 +10,3 @@ jobs:
         uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           globs: "**/*.md"
-      - name: Link checker
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: "--verbose --no-progress --exclude-path .github '**/*.md'"

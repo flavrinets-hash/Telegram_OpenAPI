@@ -38,6 +38,7 @@
 | :--- | :--- | :--- |
 | `baseUrl` | Базовый URL серверов Telegram Bot API | `https://api.telegram.org` |
 | `token` | Секретный токен авторизации бота | `123456789:ABCdef...` |
+| `webhookUrl` | Публичный HTTPS-адрес вебхука; используется в `setWebhook` и в проверке `getWebhookInfo` | `https://your-domain.com/bot-webhook` |
 
 !!! warning "Безопасность токена бота"
     При работе с коллекцией указывайте токен **исключительно в колонке Current Value**. Значение в колонке *Initial Value* экспортируется в файлы и репозитории — оставляйте его пустым или заполненным плейсхолдером (`YOUR_BOT_TOKEN`), чтобы предотвратить компрометацию секретов.
@@ -78,6 +79,22 @@ pm.test("Response is JSON", function () {
 pm.test("Response ok is true", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.ok).to.eql(true);
+});
+```
+
+Запрос `getWebhookInfo` дополнительно проверяет, что вебхук зарегистрирован на нужный адрес и Telegram не сообщает об ошибках доставки. Ожидаемый адрес хранится в переменной коллекции `webhookUrl`; она же подставляется в тело запроса `setWebhook`:
+
+```javascript
+// 4. Вебхук зарегистрирован на адрес из переменной webhookUrl
+pm.test("Webhook URL matches webhookUrl", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.result.url).to.eql(pm.collectionVariables.get("webhookUrl"));
+});
+
+// 5. Telegram не сообщает об ошибках доставки
+pm.test("No delivery errors (last_error_date is absent)", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.result).to.not.have.property("last_error_date");
 });
 ```
 

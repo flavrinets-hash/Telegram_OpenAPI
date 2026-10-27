@@ -52,7 +52,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+									"raw": "{\n  \"url\": \"{{webhookUrl}}\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -88,7 +88,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -135,7 +135,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -182,7 +182,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -229,7 +229,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -276,7 +276,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -323,7 +323,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"197.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
+											"raw": "{\n  \"url\": \"https://your-domain.com/bot-webhook\",\n  \"ip_address\": \"192.0.2.1\",\n  \"max_connections\": 40,\n  \"allowed_updates\": [\n    \"message\",\n    \"callback_query\"\n  ],\n  \"drop_pending_updates\": false,\n  \"secret_token\": \"a1b2c3d4e5f67890123456789abcdef0a1b2c3d4e5f67890123456789abcdef0\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -654,6 +654,33 @@
 					"item": [
 						{
 							"name": "Получение статуса вебхука",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"Response ok is true\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.ok).to.eql(true);",
+											"});",
+											"pm.test(\"Webhook URL matches webhookUrl\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.result.url).to.eql(pm.collectionVariables.get(\"webhookUrl\"));",
+											"});",
+											"pm.test(\"No delivery errors (last_error_date is absent)\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.result).to.not.have.property(\"last_error_date\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
 							"request": {
 								"method": "GET",
 								"header": [
@@ -705,7 +732,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"result\": {\n    \"url\": \"string\",\n    \"has_custom_certificate\": false,\n    \"pending_update_count\": 0,\n    \"ip_address\": \"197.0.2.1\",\n    \"last_error_date\": 7145,\n    \"last_error_message\": \"string\",\n    \"last_synchronization_error_date\": 0,\n    \"max_connections\": 40,\n    \"allowed_updates\": [\n      \"message\",\n      \"callback_query\"\n    ]\n  },\n  \"ok\": true\n}"
+									"body": "{\n  \"result\": {\n    \"url\": \"string\",\n    \"has_custom_certificate\": false,\n    \"pending_update_count\": 0,\n    \"ip_address\": \"192.0.2.1\",\n    \"last_error_date\": 7145,\n    \"last_error_message\": \"string\",\n    \"last_synchronization_error_date\": 0,\n    \"max_connections\": 40,\n    \"allowed_updates\": [\n      \"message\",\n      \"callback_query\"\n    ]\n  },\n  \"ok\": true\n}"
 								},
 								{
 									"name": "Некорректный запрос",
@@ -885,6 +912,10 @@
 		{
 			"key": "token",
 			"value": "string"
+		},
+		{
+			"key": "webhookUrl",
+			"value": "https://your-domain.com/bot-webhook"
 		}
 	]
 }

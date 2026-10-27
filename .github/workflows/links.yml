@@ -1,0 +1,17 @@
+name: Link Check
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Link checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: "--verbose --no-progress --max-retries 5 --retry-wait-time 5 --exclude img\\.shields\\.io --exclude-path .github '**/*.md'"

@@ -19,14 +19,6 @@
 
 * **Reference:** Спецификация OpenAPI 3.0 с интерактивным Swagger UI для методов управления вебхуком Telegram Bot API (`setWebhook`, `getWebhookInfo`, `deleteWebhook`) и структуры входящих событий `Update`.
 * **How-To Guide:** Пошаговое практическое руководство по доставке вебхуков от серверов Telegram в локальный сервис бота через Nginx (SSL/TLS-терминация, валидация секретного токена `X-Telegram-Bot-Api-Secret-Token` и устранение типовых сетевых ошибок).
-* *(В развитии)*: Расширение обучающего контура разделами **Tutorial** (интерактивный быстрый старт с нуля) и **Explanation** (концептуальный анализ архитектуры).
-
-<!--
-  TODO (Diátaxis Roadmap):
-  - Tutorial: Добавить раздел Getting Started (короткий путь «с нуля до работающего webhook» за 10-15 минут).
-  - Explanation: Концептуальное руководство (архитектура доставки событий, сравнение Webhook vs Polling, модель безопасности Nginx).
-  Запланировано в спринте артефактов (Недели 3-4).
--->
 
 ---
 
@@ -42,7 +34,7 @@
 2. Установите зависимости:
 
    ```bash
-   pip install mkdocs mkdocs-material
+   pip install -r requirements.txt
    ```
 
 3. Запустите локальный сервер документации:
@@ -57,9 +49,9 @@
 
 ## Тестирование через Postman
 
-В директории [`postman/`](postman/) подготовлены артефакты для тестирования жизненного цикла вебхука:
+В директории [`docs/assets/`](docs/assets/) подготовлены артефакты для тестирования жизненного цикла вебхука:
 
-* [`postman/telegram_webhook.postman_collection.json`](postman/telegram_webhook.postman_collection.json) — коллекция запросов (`setWebhook`, `getWebhookInfo`, `deleteWebhook`) с преднастроенными тестами и переменными окружения.
-* [`postman/telegram_webhook.postman_test_run.json`](postman/telegram_webhook.postman_test_run.json) — сохранённый отчёт успешного выполнения сквозного E2E-сценария.
+* [`docs/assets/telegram_webhook.postman_collection.json`](docs/assets/telegram_webhook.postman_collection.json) — коллекция запросов (`setWebhook`, `getWebhookInfo`, `deleteWebhook`) с преднастроенными тестами и переменными окружения.
+* [`docs/assets/telegram_webhook.postman_test_run.json`](docs/assets/telegram_webhook.postman_test_run.json) — сохранённый отчёт успешного выполнения сквозного E2E-сценария.
 
 Коллекция готова к импорту в Postman. Для запуска сценария достаточно указать токен бота в переменной окружения `token` (в поле *Current Value*).

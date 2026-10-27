@@ -280,7 +280,7 @@ components:
           type: string
           description: "IP-адрес сервера"
           format: ipv4
-          example: "197.0.2.1"
+          example: "192.0.2.1"
         max_connections:
           type: integer
           description: "Максимальное количество одновременных HTTPS-подключений к вебхуку для доставки обновлений (от 1 до 100, по умолчанию 40)"
@@ -336,7 +336,7 @@ components:
           type: string
           description: "IP-адрес сервера"
           format: ipv4
-          example: "197.0.2.1"
+          example: "192.0.2.1"
         last_error_date:
           type: integer
           format: int64

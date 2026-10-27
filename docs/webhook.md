@@ -173,7 +173,7 @@ curl --location 'https://api.telegram.org/bot<ВАШ_ТОКЕН>/getWebhookInfo'
     "url": "https://your-domain.com/bot-webhook",
     "has_custom_certificate": false,
     "pending_update_count": 0,
-    "ip_address": "197.0.2.1",
+    "ip_address": "192.0.2.1",
     "last_synchronization_error_date": 0,
     "max_connections": 40,
     "allowed_updates": [
